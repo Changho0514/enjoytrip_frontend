@@ -1,6 +1,28 @@
 <script setup>
 import KakaoMap from "@/components/map/KakaoMap.vue";
+import { sidoList } from "@/api/attraction.js";
 import { ref, onMounted } from "vue";
+
+const sido = ref([]);
+const getSido = () => { 
+  console.log("서버에서 시도목록 얻어오자!!!");
+  sidoList(
+    ({ data }) => {
+      // console.log("then => ", data);
+      sido.value = data;
+    },
+    (error) => {
+      console.log(error);
+    }
+  );
+};
+// watch(selectedSido, (newValue, oldValue) => {
+//   console.log(`newValue: ${newValue}, oldValue: ${oldValue}`)
+// })
+// const gugun = ref([]);
+// const getGugun = (sidoCode) => {
+//   console.log("서버에서 구군목록 얻어오자!!!");
+// }
 </script>
 
 <template>
@@ -21,9 +43,9 @@ import { ref, onMounted } from "vue";
         method="POST"
         role="search"
       >
-        <input type="hidden" name="command" value="areaCode" />
-        <select id="search-area" name="search_area" class="form-select me-2">
+        <select id="search-area" name="search_area" class="form-select me-2" @click="getSido">
           <option value="0" selected>시도선택</option>
+          <option :key="si.sidoCode" :value="si.sidoCode" v-for="si in sido">{{ si.sidoName }}</option>
         </select>
         <select
           id="search-sub-area"
@@ -65,6 +87,7 @@ import { ref, onMounted } from "vue";
       </form>
       <!-- kakao map start -->
       <KakaoMap />
+      {{ selectedSido }}
       <!-- <div
         id="map"
         class="row col-12 my-3 rounded ms-1"

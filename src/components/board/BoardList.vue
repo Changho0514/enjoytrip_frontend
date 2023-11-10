@@ -32,7 +32,7 @@ onMounted(() => {
 });
 
 const changeKey = (val) => {
-  console.log("BoarList에서 선택한 조건 : " + val);
+  console.log("BoardList에서 선택한 조건 : " + val);
   param.value.key = val;
 };
 
