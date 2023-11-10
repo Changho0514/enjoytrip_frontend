@@ -1,7 +1,26 @@
 <script setup>
 import KakaoMap from "@/components/map/KakaoMap.vue";
-import { sidoList, gugunList } from "@/api/attraction.js";
-import { ref, onMounted, watch } from "vue";
+import { sidoList, gugunList, attractionList } from "@/api/attraction.js";
+import { ref, onMounted, watch, toRefs } from "vue";
+
+import noImage from "@/assets/no_image.jpg";
+const attraction = ref({
+  sidoCode: 0,
+  gugunCode: 0,
+  contentTypeId: 0,
+  title: "",
+  // addr1: "",
+  // addr2: "",
+  // contentId: 0,
+  // firstImage: "",
+  // firstImage2: "",
+  // latitude: 0,
+  // longitude: 0,
+  // mlevel: "",
+  // readcount: 0,
+  // tel: "",
+  // zipcode:"",
+});
 
 // 시도선택을 클릭하면 시도를 가져오기
 const sido = ref([]);
@@ -18,11 +37,12 @@ const getSido = () => {
   );
 };
 // 시도를 클릭하면 그에 해당하는 구군 가져오기
-const selectedSido = ref(null)
-const selectedGugun = ref(null)
 const gugun = ref([]);
-watch(selectedSido, (newValue, oldValue) => {
+watch(
+  () => attraction.value.sidoCode,
+  (newValue, oldValue) => {
   console.log(`newValue: ${newValue}, oldValue: ${oldValue}`)
+  console.log("서버에서 구군목록 얻어오자!!!");
   gugunList(
     newValue,
     ({ data }) => {
@@ -33,8 +53,25 @@ watch(selectedSido, (newValue, oldValue) => {
       console.log(error);
     }
   )
-  selectedGugun.value = null;
-})
+    attraction.value.gugunCode = 0;
+});
+
+// 시도, 구군, 관광지 유형, 검색어의 검색
+const attractions = ref([]);
+const searchAttraction = () => { 
+  console.log("서버에서 관광지목록 얻어오자!!!", attraction.value)
+  attractionList(
+    attraction.value,
+    ({data}) => {
+      console.log("then => ", data);
+      attractions.value = data;
+    },
+    (error) => {
+      console.log(error);
+    }
+  )
+};
+
 </script>
 
 <template>
@@ -55,25 +92,26 @@ watch(selectedSido, (newValue, oldValue) => {
         method="POST"
         role="search"
       >
-        <select id="search-area" v-model="selectedSido" name="search_area" class="form-select me-2" @click="getSido">
-          <option value="null">시도선택</option>
+        <select id="search-area" v-model="attraction.sidoCode" name="search_area" class="form-select me-2" @click="getSido">
+          <option value="0">시도선택</option>
           <option v-for="si in sido" :key="si.sidoCode" :value="si.sidoCode">{{ si.sidoName }}</option>
         </select>
         <select
           id="search-sub-area"
           name="search_sub_area"
           class="form-select me-2"
-          v-model="selectedGugun"
+          v-model="attraction.gugunCode"
         >
-          <option value="null">구군선택</option>
-          <option v-for="gu in gugun" :key="gu.gugunCode" :value="gu.gugunName">{{ gu.gugunName }}</option>
+          <option value="0">구군선택</option>
+          <option v-for="gu in gugun" :key="gu.gugunCode" :value="gu.gugunCode">{{ gu.gugunName }}</option>
         </select>
         <select
           id="search-content-id"
           name="search_content_id"
           class="form-select me-2"
+          v-model="attraction.contentTypeId"
         >
-          <option value="0" selected>관광지 유형</option>
+          <option value="0">관광지 유형</option>
           <option value="12">관광지</option>
           <option value="14">문화시설</option>
           <option value="15">축제공연행사</option>
@@ -90,6 +128,7 @@ watch(selectedSido, (newValue, oldValue) => {
           type="search"
           placeholder="검색어"
           aria-label="검색어"
+          v-model="attraction.title"
         />
         <input
           type="button"
@@ -97,18 +136,26 @@ watch(selectedSido, (newValue, oldValue) => {
           name="btn_search"
           class="btn btn-outline-success"
           value="검색"
+          @click="searchAttraction"
         />
       </form>
       <!-- kakao map start -->
       <KakaoMap />
-      {{ selectedSido }}
+      {{ attraction.sidoCode }}
       <!-- <div
         id="map"
         class="row col-12 my-3 rounded ms-1"
         style="height: 500px"
       ></div> -->
       <!-- kakao map end -->
-      <div class="row col-12 mt-2 ms-1 card-table">
+      <div class="row col-12 mt-2 ms-1 card-table" v-for="attraction in attractions" :key="attraction.contentId">
+        <div class="card col-lg-2 mb-2 mx-2 shadow" style="cursor: pointer; width: 300px">
+		      <img class="card-img-top mt-2 rounded" :src=attraction.firstImage onerror="javascript:this.src='./assets/no_image.jpg'">
+            <div class="card-body">
+              <h4 class="card-title">{{attraction.title}}</h4>
+              <p class="card-text">{{attraction.addr1}} {{attraction.addr2}}</p>
+            </div>
+		    </div>
         <!-- <c:if test="${not empty attractions}">
 				<c:forEach var="attraction" items="${attractions}">
 					<div class="card col-lg-2 mb-2 mx-2 shadow" style="cursor: pointer; width: 300px">
