@@ -7,6 +7,11 @@ function sidoList(success, fail) {
   local.get(`/attraction/sido`).then(success).catch(fail);
 }
 
+function gugunList(selectedSido, success, fail) {
+  console.log("gugunlist in ", selectedSido);
+  local.get(`/attraction/gugun/${selectedSido}`).then(success).catch(fail);
+}
+
 function listArticle(param, success, fail) {
   console.log("board list param :", param);
   local.post(`/board/list`, JSON.stringify(param)).then(success).catch(fail);
@@ -34,5 +39,6 @@ function deleteArticle(articleno, success, fail) {
 }
 
 export {
-  sidoList
+  sidoList,
+  gugunList
 };

@@ -1,8 +1,9 @@
 <script setup>
 import KakaoMap from "@/components/map/KakaoMap.vue";
-import { sidoList } from "@/api/attraction.js";
-import { ref, onMounted } from "vue";
+import { sidoList, gugunList } from "@/api/attraction.js";
+import { ref, onMounted, watch } from "vue";
 
+// 시도선택을 클릭하면 시도를 가져오기
 const sido = ref([]);
 const getSido = () => { 
   console.log("서버에서 시도목록 얻어오자!!!");
@@ -16,13 +17,24 @@ const getSido = () => {
     }
   );
 };
-// watch(selectedSido, (newValue, oldValue) => {
-//   console.log(`newValue: ${newValue}, oldValue: ${oldValue}`)
-// })
-// const gugun = ref([]);
-// const getGugun = (sidoCode) => {
-//   console.log("서버에서 구군목록 얻어오자!!!");
-// }
+// 시도를 클릭하면 그에 해당하는 구군 가져오기
+const selectedSido = ref(null)
+const selectedGugun = ref(null)
+const gugun = ref([]);
+watch(selectedSido, (newValue, oldValue) => {
+  console.log(`newValue: ${newValue}, oldValue: ${oldValue}`)
+  gugunList(
+    newValue,
+    ({ data }) => {
+      // console.log("then => ", data);
+      gugun.value = data;
+    },
+    (error) => {
+      console.log(error);
+    }
+  )
+  selectedGugun.value = null;
+})
 </script>
 
 <template>
@@ -43,16 +55,18 @@ const getSido = () => {
         method="POST"
         role="search"
       >
-        <select id="search-area" name="search_area" class="form-select me-2" @click="getSido">
-          <option value="0" selected>시도선택</option>
-          <option :key="si.sidoCode" :value="si.sidoCode" v-for="si in sido">{{ si.sidoName }}</option>
+        <select id="search-area" v-model="selectedSido" name="search_area" class="form-select me-2" @click="getSido">
+          <option value="null">시도선택</option>
+          <option v-for="si in sido" :key="si.sidoCode" :value="si.sidoCode">{{ si.sidoName }}</option>
         </select>
         <select
           id="search-sub-area"
           name="search_sub_area"
           class="form-select me-2"
+          v-model="selectedGugun"
         >
-          <option value="0" selected>구군선택</option>
+          <option value="null">구군선택</option>
+          <option v-for="gu in gugun" :key="gu.gugunCode" :value="gu.gugunName">{{ gu.gugunName }}</option>
         </select>
         <select
           id="search-content-id"
