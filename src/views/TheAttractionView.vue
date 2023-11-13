@@ -1,9 +1,7 @@
 <script setup>
 import KakaoMap from "@/components/map/KakaoMap.vue";
 import { sidoList, gugunList, attractionList } from "@/api/attraction.js";
-import { ref, onMounted, watch, toRefs } from "vue";
-
-import noImage from "@/assets/no_image.jpg";
+import { ref, onMounted, watch } from "vue";
 const attraction = ref({
   sidoCode: 0,
   gugunCode: 0,
@@ -24,7 +22,7 @@ const attraction = ref({
 
 // 시도선택을 클릭하면 시도를 가져오기
 const sido = ref([]);
-const getSido = () => { 
+const getSido = () => {
   console.log("서버에서 시도목록 얻어오자!!!");
   sidoList(
     ({ data }) => {
@@ -41,37 +39,37 @@ const gugun = ref([]);
 watch(
   () => attraction.value.sidoCode,
   (newValue, oldValue) => {
-  console.log(`newValue: ${newValue}, oldValue: ${oldValue}`)
-  console.log("서버에서 구군목록 얻어오자!!!");
-  gugunList(
-    newValue,
-    ({ data }) => {
-      // console.log("then => ", data);
-      gugun.value = data;
-    },
-    (error) => {
-      console.log(error);
-    }
-  )
+    console.log(`newValue: ${newValue}, oldValue: ${oldValue}`);
+    console.log("서버에서 구군목록 얻어오자!!!");
+    gugunList(
+      newValue,
+      ({ data }) => {
+        // console.log("then => ", data);
+        gugun.value = data;
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
     attraction.value.gugunCode = 0;
-});
+  }
+);
 
 // 시도, 구군, 관광지 유형, 검색어의 검색
 const attractions = ref([]);
-const searchAttraction = () => { 
-  console.log("서버에서 관광지목록 얻어오자!!!", attraction.value)
+const searchAttraction = () => {
+  console.log("서버에서 관광지목록 얻어오자!!!", attraction.value);
   attractionList(
     attraction.value,
-    ({data}) => {
+    ({ data }) => {
       console.log("then => ", data);
       attractions.value = data;
     },
     (error) => {
       console.log(error);
     }
-  )
+  );
 };
-
 </script>
 
 <template>
@@ -92,9 +90,17 @@ const searchAttraction = () => {
         method="POST"
         role="search"
       >
-        <select id="search-area" v-model="attraction.sidoCode" name="search_area" class="form-select me-2" @click="getSido">
+        <select
+          id="search-area"
+          v-model="attraction.sidoCode"
+          name="search_area"
+          class="form-select me-2"
+          @click="getSido"
+        >
           <option value="0">시도선택</option>
-          <option v-for="si in sido" :key="si.sidoCode" :value="si.sidoCode">{{ si.sidoName }}</option>
+          <option v-for="si in sido" :key="si.sidoCode" :value="si.sidoCode">
+            {{ si.sidoName }}
+          </option>
         </select>
         <select
           id="search-sub-area"
@@ -103,7 +109,9 @@ const searchAttraction = () => {
           v-model="attraction.gugunCode"
         >
           <option value="0">구군선택</option>
-          <option v-for="gu in gugun" :key="gu.gugunCode" :value="gu.gugunCode">{{ gu.gugunName }}</option>
+          <option v-for="gu in gugun" :key="gu.gugunCode" :value="gu.gugunCode">
+            {{ gu.gugunName }}
+          </option>
         </select>
         <select
           id="search-content-id"
@@ -148,14 +156,27 @@ const searchAttraction = () => {
         style="height: 500px"
       ></div> -->
       <!-- kakao map end -->
-      <div class="row col-12 mt-2 ms-1 card-table" v-for="attraction in attractions" :key="attraction.contentId">
-        <div class="card col-lg-2 mb-2 mx-2 shadow" style="cursor: pointer; width: 300px">
-		      <img class="card-img-top mt-2 rounded" :src=attraction.firstImage onerror="javascript:this.src='./assets/no_image.jpg'">
-            <div class="card-body">
-              <h4 class="card-title">{{attraction.title}}</h4>
-              <p class="card-text">{{attraction.addr1}} {{attraction.addr2}}</p>
-            </div>
-		    </div>
+      <div
+        class="row col-12 mt-2 ms-1 card-table"
+        v-for="attraction in attractions"
+        :key="attraction.contentId"
+      >
+        <div
+          class="card col-lg-2 mb-2 mx-2 shadow"
+          style="cursor: pointer; width: 300px"
+        >
+          <img
+            class="card-img-top mt-2 rounded"
+            :src="attraction.firstImage"
+            onerror="javascript:this.src='./src/assets/no_image.jpg'"
+          />
+          <div class="card-body">
+            <h4 class="card-title">{{ attraction.title }}</h4>
+            <p class="card-text">
+              {{ attraction.addr1 }} {{ attraction.addr2 }}
+            </p>
+          </div>
+        </div>
         <!-- <c:if test="${not empty attractions}">
 				<c:forEach var="attraction" items="${attractions}">
 					<div class="card col-lg-2 mb-2 mx-2 shadow" style="cursor: pointer; width: 300px">

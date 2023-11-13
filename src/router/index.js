@@ -14,11 +14,11 @@ const router = createRouter({
       name: "main",
       component: TheMainView,
     },
-    {
-      path: "/estations",
-      name: "estations",
-      component: TheElectricChargingStationVue,
-    },
+    // {
+    //   path: "/estations",
+    //   name: "estations",
+    //   component: TheElectricChargingStationVue,
+    // },
     {
       path: "/attraction",
       name: "attraction",
