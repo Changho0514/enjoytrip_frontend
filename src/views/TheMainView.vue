@@ -2,28 +2,49 @@
 
 <template>
   <div class="row text-center" style="background-color: rgb(206, 215, 238)">
-      <div>
-        <div class="welcome-text">
-          <h1>
-            <p><b>지역사랑! </b><b style="color: rgb(142, 95, 231)">우리지역 관광지.</b></p>
-          </h1>
-        </div>
-        <div class="info-text"><b>우리지역의 숨어있는 아름다운 관광지를 알려드립니다.</b></div>
-        <div class="info-text">
-          <b>관광지 주변의 맛집, 숙박업소와 여행코스, 지역 축제등을 보실수도 있습니다.</b>
-        </div>
-        <div class="search">
-          <button
-            style="background-color: rgb(142, 95, 231); color: white"
-            class="btn"
-            type="button"
-          >
-            관광지 찾아 보기
-          </button>
-        </div>
+    <div>
+      <div class="welcome-text">
+        <h1>
+          <p>
+            <b>지역사랑! </b
+            ><b style="color: rgb(138, 84, 238)">우리지역 관광지.</b>
+          </p>
+        </h1>
+      </div>
+      <div class="info-text">
+        <b>우리지역의 숨어있는 아름다운 관광지를 알려드립니다.</b>
+      </div>
+      <div class="info-text">
+        <b
+          >관광지 주변의 맛집, 숙박업소와 여행코스, 지역 축제등을 보실수도
+          있습니다.</b
+        >
+      </div>
+      <div class="search">
+        <button
+          style="background-color: rgb(142, 95, 231); color: white"
+          class="btn"
+          type="button"
+        >
+          관광지 찾아 보기
+        </button>
       </div>
     </div>
-    <div class="row justify-content-center" style="background-color: rgb(206, 215, 238)">
+  </div>
+  <div id="slideWrap" class="carousel" data-ride="carousel">
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <img src="@/assets/seoul_main.png" alt="" width="1100" height="500" />
+      </div>
+      <div class="carousel-item">
+        <img src="@/assets/seoul_main2.png" alt="" width="1100" height="500" />
+      </div>
+      <div class="carousel-item">
+        <img src="@/assets/seoul_main3.png" alt="" width="1100" height="500" />
+      </div>
+    </div>
+  </div>
+  <!-- <div class="row justify-content-center" style="background-color: rgb(206, 215, 238)">
       <div class="card col-lg-6 mb-3 me-4 shadow" style="width: 300px">
         <img
           class="card-img-top"
@@ -72,7 +93,14 @@
           <p class="card-text">서울 송파구 올림픽로 300</p>
         </div>
       </div>
-    </div>
+    </div> -->
 </template>
 
-<style scoped></style>
+<style scoped>
+img {
+  position: relative;
+  width: 300px;
+  left: 1000px;
+  top: 50px;
+}
+</style>

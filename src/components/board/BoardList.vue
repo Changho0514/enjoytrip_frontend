@@ -42,9 +42,9 @@ const getArticleList = () => {
     param.value,
     ({ data }) => {
       console.log("then => ", data);
-      articles.value = data;
-      // currentPage.value = data.currentPage;
-      // totalPage.value = data.totalPageCount;
+      articles.value = data.articles;
+      currentPage.value = data.currentPage;
+      totalPage.value = data.totalPageCount;
     },
     (error) => {
       console.log(error);

@@ -62,7 +62,9 @@ function onDeleteArticle() {
       </div>
       <div class="col-lg-10 text-start">
         <div class="row my-2">
-          <h2 class="text-secondary px-5">{{ article.articleNo }}. {{ article.subject }}</h2>
+          <h2 class="text-secondary px-5">
+            {{ article.articleNo }}. {{ article.subject }}
+          </h2>
         </div>
         <div class="row">
           <div class="col-md-8">
@@ -86,13 +88,25 @@ function onDeleteArticle() {
           </div>
           <div class="divider mt-3 mb-3"></div>
           <div class="d-flex justify-content-end">
-            <button type="button" class="btn btn-outline-primary mb-3" @click="moveList">
+            <button
+              type="button"
+              class="btn btn-outline-primary mb-3"
+              @click="moveList"
+            >
               글목록
             </button>
-            <button type="button" class="btn btn-outline-success mb-3 ms-1" @click="moveModify">
+            <button
+              type="button"
+              class="btn btn-outline-success mb-3 ms-1"
+              @click="moveModify"
+            >
               글수정
             </button>
-            <button type="button" class="btn btn-outline-danger mb-3 ms-1" @click="onDeleteArticle">
+            <button
+              type="button"
+              class="btn btn-outline-danger mb-3 ms-1"
+              @click="onDeleteArticle"
+            >
               글삭제
             </button>
           </div>
