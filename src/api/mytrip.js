@@ -2,27 +2,25 @@ import { localAxios } from "@/util/http-commons";
 
 const local = localAxios();
 
-function sidoList(success, fail) {
-  console.log("sidolist ");
-  local.get(`/attraction/sido`).then(success).catch(fail);
+function getMytripMax(userId, success, fail) {
+  console.log("getMytripMax's userId : ", userId);
+  local.get(`/mytrip/getMytripMax/${userId}`).then(success).catch(fail);
 }
 
-function gugunList(selectedSido, success, fail) {
-  console.log("gugunlist in ", selectedSido);
-  local.get(`/attraction/gugun/${selectedSido}`).then(success).catch(fail);
-}
-
-function attractionList(attraction, success, fail) {
-  console.log("attraction list param :", attraction);
+function addMytripAll(param, success, fail) {
+  console.log("나의 여행계획 모두 추가 : ", param);
   local
-    .post(`/attraction/list`, JSON.stringify(attraction))
+    .post(`/mytrip/addMytripAll`, JSON.stringify(param))
     .then(success)
     .catch(fail);
 }
 
-function getAttration(contentId, success, fail) {
-  console.log("getAttraction in ", contentId);
-  local.get(`/attraction/getAttraction/${contentId}`).then(success).catch(fail);
+function getMytrip(userId, userMytripNo, success, fail) {
+  console.log("유저가 등록한 해당 계획 가져오기");
+  local
+    .get(`/mytrip/getMytrip/${userId}/${userMytripNo}`)
+    .then(success)
+    .catch(fail);
 }
 
 // function listArticle(param, success, fail) {
@@ -51,4 +49,4 @@ function getAttration(contentId, success, fail) {
 //   local.delete(`/board/${articleno}`).then(success).catch(fail);
 // }
 
-export { sidoList, gugunList, attractionList, getAttration };
+export { getMytripMax, addMytripAll, getMytrip };

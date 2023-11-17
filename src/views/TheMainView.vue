@@ -31,76 +31,59 @@
       </div>
     </div>
   </div>
-  <div id="slideWrap" class="carousel" data-ride="carousel">
-    <div class="carousel-inner">
-      <div class="carousel-item active">
-        <img src="@/assets/seoul_main.png" alt="" width="1100" height="500" />
+  <div
+    class="row justify-content-center"
+    style="background-color: rgb(206, 215, 238)"
+  >
+    <div class="card col-lg-6 mb-3 me-4 shadow" style="width: 300px">
+      <img
+        class="card-img-top"
+        src="@/assets/ssafy_logo.png"
+        alt="Card image"
+        style="width: 270px; height: 400px"
+      />
+      <div class="card-body">
+        <h4 class="card-title"><b>경복궁</b></h4>
+        <p class="card-text">서울 종로구 사직로 161</p>
       </div>
-      <div class="carousel-item">
-        <img src="@/assets/seoul_main2.png" alt="" width="1100" height="500" />
+    </div>
+    <div class="card col-lg-6 mb-3 me-4 shadow" style="width: 300px">
+      <img
+        class="card-img-top"
+        src="@/assets/ssafy_logo.png"
+        alt="Card image"
+        style="width: 270px; height: 400px"
+      />
+      <div class="card-body">
+        <h4 class="card-title"><b>남산</b></h4>
+        <p class="card-text">서울 중구 회현동1가</p>
       </div>
-      <div class="carousel-item">
-        <img src="@/assets/seoul_main3.png" alt="" width="1100" height="500" />
+    </div>
+    <div class="card col-lg-6 mb-3 me-4 shadow" style="width: 300px">
+      <img
+        class="card-img-top"
+        src="@/assets/ssafy_logo.png"
+        alt="Card image"
+        style="width: 270px; height: 400px"
+      />
+      <div class="card-body">
+        <h4 class="card-title"><b>별마당 도서관</b></h4>
+        <p class="card-text">서울 강남구 영동대로 513</p>
+      </div>
+    </div>
+    <div class="card col-lg-6 mb-3 me-4 shadow" style="width: 300px">
+      <img
+        class="card-img-top"
+        src="@/assets/ssafy_logo.png"
+        alt="Card image"
+        style="width: 270px; height: 400px"
+      />
+      <div class="card-body">
+        <h4 class="card-title"><b>롯데월드몰</b></h4>
+        <p class="card-text">서울 송파구 올림픽로 300</p>
       </div>
     </div>
   </div>
-  <!-- <div class="row justify-content-center" style="background-color: rgb(206, 215, 238)">
-      <div class="card col-lg-6 mb-3 me-4 shadow" style="width: 300px">
-        <img
-          class="card-img-top"
-          src="@/assets/ssafy_logo.png"
-          alt="Card image"
-          style="width: 270px; height: 400px"
-        />
-        <div class="card-body">
-          <h4 class="card-title"><b>경복궁</b></h4>
-          <p class="card-text">서울 종로구 사직로 161</p>
-        </div>
-      </div>
-      <div class="card col-lg-6 mb-3 me-4 shadow" style="width: 300px">
-        <img
-          class="card-img-top"
-          src="@/assets/ssafy_logo.png"
-          alt="Card image"
-          style="width: 270px; height: 400px"
-        />
-        <div class="card-body">
-          <h4 class="card-title"><b>남산</b></h4>
-          <p class="card-text">서울 중구 회현동1가</p>
-        </div>
-      </div>
-      <div class="card col-lg-6 mb-3 me-4 shadow" style="width: 300px">
-        <img
-          class="card-img-top"
-          src="@/assets/ssafy_logo.png"
-          alt="Card image"
-          style="width: 270px; height: 400px"
-        />
-        <div class="card-body">
-          <h4 class="card-title"><b>별마당 도서관</b></h4>
-          <p class="card-text">서울 강남구 영동대로 513</p>
-        </div>
-      </div>
-      <div class="card col-lg-6 mb-3 me-4 shadow" style="width: 300px">
-        <img
-          class="card-img-top"
-          src="@/assets/ssafy_logo.png"
-          alt="Card image"
-          style="width: 270px; height: 400px"
-        />
-        <div class="card-body">
-          <h4 class="card-title"><b>롯데월드몰</b></h4>
-          <p class="card-text">서울 송파구 올림픽로 300</p>
-        </div>
-      </div>
-    </div> -->
 </template>
 
-<style scoped>
-img {
-  position: relative;
-  width: 300px;
-  left: 1000px;
-  top: 50px;
-}
-</style>
+<style scoped></style>
