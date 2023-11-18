@@ -1,18 +1,14 @@
 <script setup>
 import { ref, onMounted } from "vue";
 
-defineProps({ hotplaces: Object });
+defineProps({ hotplace: Object });
 
 const urls = ({ saveFolder, saveFile }) =>
   `http://localhost:8090/enjoytrip/upload/${saveFolder}/${saveFile}`;
 </script>
 
 <template>
-  <tr
-    class="text-center"
-    v-for="hotplace in hotplaces"
-    :key="hotplace.hotplaceNo"
-  >
+  <tr class="text-center">
     <div class="card shadow-sm">
       <img
         :src="urls(hotplace)"

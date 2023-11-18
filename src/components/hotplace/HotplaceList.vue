@@ -6,7 +6,8 @@ import VSelect from "@/components/common/VSelect.vue";
 import HotplaceListItem from "@/components/hotplace/HotplaceListItem.vue";
 import PageNavigation from "@/components/common/PageNavigation.vue";
 const router = useRouter();
-const articles = ref([]);
+
+const hotplaces = ref([]);
 const currentPage = ref(1);
 const totalPage = ref(1);
 const { VITE_ARTICLE_LIST_SIZE } = import.meta.env;
@@ -19,17 +20,13 @@ const param = ref({
 onMounted(() => {
   getHotplaceList();
 });
-const changeKey = (val) => {
-  console.log("getHotplaceList에서 선택한 조건 : " + val);
-  param.value.key = val;
-};
 const getHotplaceList = () => {
   console.log("서버에서 글목록 얻어오자!!!", param.value);
   listHotplace(
     param.value,
     ({ data }) => {
       console.log("then => ", data);
-      articles.value = data.articles;
+      hotplaces.value = data.hotplaces;
       currentPage.value = data.currentPage;
       totalPage.value = data.totalPageCount;
     },
@@ -42,10 +39,11 @@ const onPageChange = (val) => {
   console.log(val + "번 페이지로 이동 준비 끝!!!");
   currentPage.value = val;
   param.value.pgno = val;
-  getArticleList();
+  getHotplaceList();
 };
 const moveWrite = () => {
-  router.push({ name: "article-write" });
+  console.log("글쓰기 버튼 눌렀니?");
+  router.push({ name: "hotplace-write" });
 };
 </script>
 
@@ -60,20 +58,18 @@ const moveWrite = () => {
       <div class="col-lg-10">
         <div class="row align-self-center mb-2">
           <div class="col-md-2 text-start">
-            <button
-              type="button"
-              class="btn btn-outline-primary btn-sm"
-              @click="moveWrite"
-            >
+            <button type="button" class="btn btn-outline-primary btn-sm" @click="moveWrite">
               글쓰기
             </button>
           </div>
         </div>
         <div class="row">
+          <!-- <HotplaceListItem :hotplaces="hotplaces" /> -->
+
           <HotplaceListItem
-            v-for="article in articles"
-            :key="article.articleNo"
-            :article="article"
+            v-for="hotplace in hotplaces"
+            :key="hotplace.hotplaceNo"
+            :hotplace="hotplace"
           ></HotplaceListItem>
         </div>
       </div>

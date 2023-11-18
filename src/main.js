@@ -10,17 +10,24 @@ import router from "./router";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap";
 
+// Vuetify
+import "@mdi/font/css/materialdesignicons.css";
+import "vuetify/styles";
+import { createVuetify } from "vuetify";
+import { aliases, mdi } from "vuetify/iconsets/mdi";
+import * as components from "vuetify/components";
+import * as directives from "vuetify/directives";
+
 const app = createApp(App);
 const pinia = createPinia();
 pinia.use(piniaPluginPersistedstate);
 
-// app.use(createPinia());
-// app.use(router);
+const vuetify = createVuetify({
+  components,
+  directives,
+});
 
-// app.mount("#app");
-
-app.use(pinia).use(router);
-//.mount("#app");
+app.use(pinia).use(router).use(vuetify);
 
 router.isReady().then(() => {
   app.mount("#app");

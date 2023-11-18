@@ -5,6 +5,8 @@ import TheAttractionView from "@/views/TheAttractionView.vue";
 import TheMytripView from "@/views/TheMytripView.vue";
 import TheHotplaceView from "@/views/TheHotplaceView.vue";
 import TheBoardView from "../views/TheBoardView.vue";
+import TestView from "@/views/TestView.vue";
+
 
 import { storeToRefs } from "pinia";
 import { useMemberStore } from "@/stores/member";
@@ -34,7 +36,7 @@ const router = createRouter({
     {
       path: "/",
       name: "main",
-      component: TheMainView,
+      component: TestView,
     },
     {
       path: "/user",
@@ -108,6 +110,7 @@ const router = createRouter({
         {
           path: "write",
           name: "hotplace-write",
+          beforeEnter: onlyAuthUser,
           component: () => import("@/components/hotplace/HotplaceWrite.vue"),
         },
       ],
