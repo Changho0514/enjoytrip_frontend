@@ -6,7 +6,9 @@ import TheMytripView from "@/views/TheMytripView.vue";
 import TheHotplaceView from "@/views/TheHotplaceView.vue";
 import TheBoardView from "../views/TheBoardView.vue";
 import TestView from "@/views/TestView.vue";
-
+import BoardTestView from "@/views/BoardTestView.vue";
+import MainRecommendView from "@/components/main/MainRecommendView.vue";
+import MainAccompanyView from "@/components/main/MainAccompanyView.vue";
 
 import { storeToRefs } from "pinia";
 import { useMemberStore } from "@/stores/member";
@@ -14,7 +16,11 @@ import { useMemberStore } from "@/stores/member";
 const onlyAuthUser = async (to, from, next) => {
   const memberStore = useMemberStore();
   let token = sessionStorage.getItem("accessToken");
-  console.log("로그인 처리 전================================", memberStore.userInfo, token);
+  console.log(
+    "로그인 처리 전================================",
+    memberStore.userInfo,
+    token
+  );
 
   if (memberStore.userInfo != null && token) {
     console.log("토큰 유효성 체크하러 가자!!!!");
@@ -78,6 +84,7 @@ const router = createRouter({
     //   name: "estations",
     //   component: TheElectricChargingStationVue,
     // },
+
     {
       path: "/attraction",
       name: "attraction",

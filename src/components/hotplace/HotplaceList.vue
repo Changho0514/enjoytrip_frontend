@@ -2,7 +2,6 @@
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { listHotplace } from "@/api/hotplace.js";
-import VSelect from "@/components/common/VSelect.vue";
 import HotplaceListItem from "@/components/hotplace/HotplaceListItem.vue";
 import PageNavigation from "@/components/common/PageNavigation.vue";
 const router = useRouter();
@@ -58,7 +57,11 @@ const moveWrite = () => {
       <div class="col-lg-10">
         <div class="row align-self-center mb-2">
           <div class="col-md-2 text-start">
-            <button type="button" class="btn btn-outline-primary btn-sm" @click="moveWrite">
+            <button
+              type="button"
+              class="btn btn-outline-primary btn-sm"
+              @click="moveWrite"
+            >
               글쓰기
             </button>
           </div>
