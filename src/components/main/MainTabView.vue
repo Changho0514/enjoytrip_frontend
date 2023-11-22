@@ -3,15 +3,13 @@
     <div class="container">
       <div class="row gy-4">
         <!-- 이 달의 추천 여행지 -->
-        <div
-          class="col-xl-3 col-md-6 d-flex"
-          :style="{ animation: 'slide 2s ease-out' }"
-          data-aos="zoom-out"
-        >
+        <div class="col-xl-3 col-md-6 d-flex" data-aos="zoom-out">
           <div class="service-item position-relative">
             <div class="icon"><i class="bi-geo-fill"></i></div>
             <h4>
-              <a href="#cta" class="stretched-link">이 달의 추천 여행지</a>
+              <a href="#recommandview" class="stretched-link"
+                >이 달의 추천 여행지</a
+              >
             </h4>
             <p>여행은 가고 싶은데 어디로 가야할지 모르겠나요?</p>
             <p><b>EnjoyTrip</b>이 추천하는 이 달의 여행지로 떠나보세요</p>
@@ -21,14 +19,14 @@
 
         <!-- 테마 별 추천 여행지 -->
         <div
-          class="col-xl-3 col-md-6 d-flex"
+          class="col-xl-3 col-md-3 d-flex"
           data-aos="zoom-out"
           data-aos-delay="200"
         >
           <div class="service-item position-relative">
             <div class="icon"><i class="bi-phone-vibrate-fill"></i></div>
             <h4>
-              <a href="#features" class="stretched-link">동행 구하기</a>
+              <a href="#accompanyview" class="stretched-link">동행 구하기</a>
             </h4>
 
             <p>혼자 떠나는 여행은 심심하신가요?</p>
@@ -39,15 +37,11 @@
         <!-- End Service Item -->
 
         <!-- 여행 계획 짜기 -->
-        <div
-          class="col-xl-3 col-md-6 d-flex"
-          data-aos="zoom-out"
-          data-aos-delay="400"
-        >
+        <div class="col-md-3 d-flex" data-aos="zoom-out" data-aos-delay="400">
           <div class="service-item position-relative">
             <div class="icon"><i class="bi-calendar2-week"></i></div>
             <h4>
-              <a href="#services" class="stretched-link"> 여행 계획</a>
+              <a href="#planview" class="stretched-link"> 여행 계획</a>
             </h4>
             <p>여행 계획을 기획 중이신가요?</p>
             <p>본인만의 여행 계획을 짜고, 공유해보세요</p>
@@ -56,15 +50,13 @@
         <!-- End Service Item -->
 
         <!-- 핫 플레이스 공유 -->
-        <div
-          class="col-xl-3 col-md-6 d-flex"
-          data-aos="zoom-out"
-          data-aos-delay="600"
-        >
+        <div class="col-md-3 d-flex" data-aos="zoom-out" data-aos-delay="600">
           <div class="service-item position-relative">
             <div class="icon"><i class="bi-star-fill"></i>></div>
             <h4>
-              <a href="#portfolio" class="stretched-link">핫 플레이스 공유</a>
+              <a href="#hotplaceview" class="stretched-link"
+                >핫 플레이스 공유</a
+              >
             </h4>
             <p>지금 떠오르는 핫 플레이스는?</p>
             <p><b>EnjoyTrip</b>에서 확인해보세요</p>
@@ -82,10 +74,6 @@ console.log("mainText : ", mainText);
 window.addEventListener("scroll", function () {
   let value = window.scrollY;
   console.log("scrollY", value);
-
-  // if (value > 490) {
-  //   mainText.style.animation = "slide 2s ease-out";
-  // }
 });
 </script>
 
@@ -95,6 +83,8 @@ window.addEventListener("scroll", function () {
   transition: all ease-in-out 0.4s;
   background: var(--color-white);
   height: 100%;
+  width: 100%;
+  box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
 }
 .featured-services .service-item .icon {
   margin-bottom: 10px;
@@ -118,7 +108,24 @@ window.addEventListener("scroll", function () {
 }
 .featured-services .service-item:hover {
   transform: translateY(-10px);
-  box-shadow: 0px 0 60px 0 rgba(var(--color-secondary-rgb), 0.1);
+  /* box-shadow: 0px 20px 60px 5px rgba(var(--color-secondary-rgb), 0.2); */
+  /* box-shadow: 0px 10px 35px rgba(0, 0, 0, 0.5); */
+  border: 1px solid (0, 0, 0, 0.5);
+}
+.featured-services .service-item::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  box-shadow: 0px 10px 35px rgba(0, 0, 0, 0.3);
+
+  opacity: 0;
+  transition: ease-in-out 0.5s;
+}
+.featured-services .service-item:hover::after {
+  opacity: 1;
 }
 .featured-services .service-item:hover h4 a {
   color: var(--color-primary);
@@ -132,5 +139,11 @@ window.addEventListener("scroll", function () {
     left: 400px;
     opacity: 1;
   }
+}
+
+.stretched-link {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 </style>

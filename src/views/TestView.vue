@@ -1,31 +1,13 @@
-<!-- <template>
-  <div class="layout-container">
-    <div class="left-section">
-     
-    </div>
-    <div class="right-section">
-     
-      <CarouselView />
-
-      <div class="inner-section">             
-        <WeatherView />
-        <WeatherViewTemp />
-        <MainTabView />
-      </div>
-      <div class="inner-padding"></div>
-    </div>
-  </div>
-</template> -->
-
 <template>
   <CarouselView />
   <div class="container">
     <WeatherView />
-    <WeatherViewTemp />
+    <WeatherDetailView />
     <MainTabView />
     <MainRecommendView />
     <MainAccompanyView />
     <MainPlanView />
+    <MainHotPlaceView />
   </div>
 </template>
 
@@ -33,23 +15,11 @@
 import WeatherView from "@/components/main/WeatherView.vue";
 import CarouselView from "@/components/main/CarouselView.vue";
 import MainTabView from "@/components/main/MainTabView.vue";
-import WeatherViewTemp from "@/components/main/WeatherViewTemp.vue";
-import TabTestView from "@/components/main/TabTestView.vue";
+import WeatherDetailView from "@/components/main/WeatherDetailView.vue";
 import MainRecommendView from "@/components/main/MainRecommendView.vue";
 import MainAccompanyView from "@/components/main/MainAccompanyView.vue";
 import MainPlanView from "@/components/main/MainPlanView.vue";
-
-// import { ref, onMounted } from "vue";
-
-// onMounted(() => {
-//   window.addEventListener("scroll", handleScroll);
-// });
-
-// const handleScroll = () => {
-//   let value = window.scrollY;
-//   console.log("scrollY", value);
-//   // Use the value variable as needed in your component
-// };
+import MainHotPlaceView from "@/components/main/MainHotPlaceView.vue";
 </script>
 
 <style>
@@ -58,12 +28,12 @@ import MainPlanView from "@/components/main/MainPlanView.vue";
 }
 
 .left-section {
-  flex: 1; /* Takes up 1/3 of the width */
+  flex: 1;
 }
 
 .right-section {
-  flex: 9; /* Takes up 2/3 of the width */
-  padding: 20px; /* Optional: Add padding for spacing */
+  flex: 9;
+  padding: 20px;
 }
 .inner-section {
   flex: 4;

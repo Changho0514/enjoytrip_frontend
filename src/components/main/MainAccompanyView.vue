@@ -1,5 +1,5 @@
 <template>
-  <div class="container col-xxl-8 px-4 py-5">
+  <div class="container col-xxl-8 px-4 py-5" id="accompanyview">
     <div class="row flex-lg-row-reverse align-items-center g-5 py-5">
       <div class="col-10 col-sm-8 col-lg-6">
         <img
@@ -16,14 +16,10 @@
           동행 구하기
         </h1>
         <p class="lead">특별한 순간들을 함께 나눌 동행자가 있다면?</p>
-        <p class="lead">새로운 인연을 만나고</p>
-        <p class="lead">
-          함께하는 즐거움! 새로운 친구와 함께 여행을 떠나보세요
-        </p>
+        <p class="lead">새로운 인연을 만나고 함께하는 즐거움!</p>
+        <p class="lead">새로운 친구와 함께 여행을 떠나보세요</p>
         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-          <button type="button" class="btn btn-secondary btn-lg px-4 me-md-2">
-            동행 구하기
-          </button>
+          <v-btn @click="goBoard"> 동행 구하기</v-btn>
         </div>
       </div>
     </div>
@@ -32,24 +28,16 @@
 
 <script setup>
 import "@/assets/dist/js/bootstrap.bundle.min.js";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
+
+const goBoard = () => {
+  router.push({ name: "board" });
+};
 </script>
 
 <style scoped>
-.flex-container {
-  display: flex;
-}
-
-.flex-item {
-  flex: 1;
-  margin-right: 10px; /* 각 div 사이의 간격을 조절할 수 있습니다. */
-}
-
-.content {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
-
 img {
   margin-top: 10px;
   max-width: 100%;

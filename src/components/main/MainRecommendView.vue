@@ -1,5 +1,5 @@
 <template>
-  <div class="container my-5">
+  <div class="container my-5" id="recommandview">
     <div
       class="row p-4 pb-0 pe-lg-0 pt-lg-5 align-items-center rounded-3 border shadow-lg"
     >
@@ -79,6 +79,13 @@ import "@/assets/dist/js/bootstrap.bundle.min.js";
 .flex-item {
   flex: 1;
   margin-right: 10px; /* 각 div 사이의 간격을 조절할 수 있습니다. */
+}
+
+.flex-item:hover {
+  padding: 50px;
+  border: 4px;
+  flex: 2;
+  transition: 1s;
 }
 
 .content {

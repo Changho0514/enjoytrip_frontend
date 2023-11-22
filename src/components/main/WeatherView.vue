@@ -8,7 +8,7 @@
         <tr>
           <td v-for="(area, index) in selAreas" :key="index">
             <td v-if="area.weathers.length > 0">
-              <div>{{area.name}}</div>
+              <h2>{{ area.name }}</h2>
               <div>
                 <img
                   class="w-img"

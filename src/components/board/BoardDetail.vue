@@ -6,6 +6,7 @@ import { detailArticle, deleteArticle } from "@/api/board";
 const route = useRoute();
 const router = useRouter();
 
+
 // const articleno = ref(route.params.articleno);
 const { articleno } = route.params;
 
