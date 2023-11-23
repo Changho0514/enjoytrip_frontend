@@ -25,7 +25,15 @@ function modifyArticle(article, success, fail) {
 }
 
 function deleteArticle(articleno, success, fail) {
-  local.delete(`/board/${articleno}`).then(success).catch(fail);
+  local.delete(`/board/delete/${articleno}`).then(success).catch(fail);
+}
+
+function userlistArticle(userId, success, fail) {
+  local.get(`/board/userlist/${userId}`).then(success).catch(fail);
+}
+
+function checkWriteUser(articleno, success, fail) {
+  local.get(`/board/check/${articleno}`).then(success).catch(fail);
 }
 
 export {
@@ -35,4 +43,6 @@ export {
   getModifyArticle,
   modifyArticle,
   deleteArticle,
+  userlistArticle,
+  checkWriteUser,
 };

@@ -1,22 +1,26 @@
 <script setup>
-import { userModify } from "@/api/user.js";
+import { userModify, uploadProfile } from "@/api/user.js";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { useMemberStore } from "@/stores/member";
 import { storeToRefs } from "pinia";
 
 const memberStore = useMemberStore();
-const { userInfo } = storeToRefs(memberStore);
+const { userInfo, getUserInfo } = storeToRefs(memberStore);
 
 const router = useRouter();
+
+// 유저 객체
 const user = ref({
   userId: userInfo.value.userId,
   userName: userInfo.value.userName,
   emailId: userInfo.value.emailId,
   emailDomain: userInfo.value.emailDomain,
 });
-const modify = () => {
-  userModify(
+
+// 수정하기 버튼을 누르면 실행되는 함수
+const modify = async () => {
+  await userModify(
     user.value,
     (response) => {
       let msg = "회원정보 수정에 실패했습니다";
@@ -30,69 +34,108 @@ const modify = () => {
       console.log(error);
     }
   );
+  // 프로필 사진
+  const formData = new FormData();
+  formData.append("upfile", image.file);
+  formData.append("userId", userInfo.value.userId);
+  await uploadProfile(
+    formData,
+    (response) => {
+      console.log("formData : ", response);
+      let token = sessionStorage.getItem("accessToken");
+      getUserInfo(token);
+    },
+    (error) => {
+      console.log(error);
+    }
+  );
+  // goMyPage();
+  goMainPage();
 };
+
 const goMyPage = () => {
   router.push({ name: "user-mypage" });
+};
+const goMainPage = () => {
+  router.push({ name: "main" });
+};
+
+// 파일을 위한 객체
+const image = ref({
+  file: null,
+});
+
+const onInputImg = (e) => {
+  console.log("이미지 upload ", e.target.files[0]);
+  image.file = e.target.files[0];
 };
 </script>
 
 <template>
-  <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-lg-10">
-        <h2 class="my-3 py-3 shadow-sm bg-light text-center">
-          <mark class="orange">정보 수정</mark>
-        </h2>
-      </div>
-      <div class="col-lg-10 text-start">
-        <form>
-          <div class="mb-3">
-            <label for="username" class="form-label">이름 : </label>
-            <input type="text" class="form-control" placeholder="이름..." v-model="user.userName" />
-          </div>
-          <div class="mb-3">
-            <label for="userid" class="form-label">아이디 : </label>
-            <input
-              type="text"
-              class="form-control"
-              placeholder="아이디..."
-              v-model="user.userId"
-              readonly
-            />
-          </div>
-          <div class="mb-3">
-            <label for="emailid" class="form-label">이메일 : </label>
-            <div class="input-group">
-              <input
-                type="text"
-                class="form-control"
-                placeholder="이메일아이디"
-                v-model="user.emailId"
-              />
-              <span class="input-group-text">@</span>
-              <select
-                class="form-select"
-                aria-label="이메일 도메인 선택"
-                v-model="user.emailDomain"
-              >
-                <option selected>선택</option>
-                <option value="ssafy.com">싸피</option>
-                <option value="google.com">구글</option>
-                <option value="naver.com">네이버</option>
-                <option value="kakao.com">카카오</option>
-              </select>
+  <v-app id="back" class="mt-10">
+    <v-main>
+      <v-container style="max-width: 500px" id="container">
+        <v-flex xs12>
+          <v-card>
+            <div class="pa-10">
+              <h1 style="text-align: center; font-weight: bold" class="mb-10">
+                Edit Information
+              </h1>
+              <form>
+                <v-text-field
+                  label="ID"
+                  prepend-inner-icon="mdi-account"
+                  v-model="user.userId"
+                  readonly="true"
+                ></v-text-field>
+                <v-text-field
+                  prepend-inner-icon="mdi-lock"
+                  label="Name"
+                  v-model="user.userName"
+                >
+                </v-text-field>
+                <v-layout row wrap>
+                  <v-text-field
+                    prepend-inner-icon="mdi-email-open-outline"
+                    type="email"
+                    label="EmailId"
+                    v-model="user.emailId"
+                    style="width: 100px"
+                  ></v-text-field>
+                  &nbsp;&nbsp;&nbsp;
+                  <v-text-field
+                    prepend-inner-icon="mdi-email-outline"
+                    type="email"
+                    label="EmailDomain"
+                    v-model="user.emailDomain"
+                    style="width: 150px"
+                  >
+                  </v-text-field>
+                </v-layout>
+                <input
+                  id="write-file"
+                  class="file-input mb-3"
+                  ref="file"
+                  type="file"
+                  @change="onInputImg"
+                  placeholder="첨부된 파일이 없습니다."
+                />
+                <div class="justify-center">
+                  <v-btn variant="tonal" style="color: #cd4275" @click="modify">
+                    저장
+                  </v-btn>
+                </div>
+              </form>
             </div>
-          </div>
-          <div class="col-auto text-center">
-            <button type="button" class="btn btn-outline-primary mb-3" @click="modify">
-              수정하기
-            </button>
-            <button type="button" class="btn btn-outline-success ms-1 mb-3">초기화</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
+          </v-card>
+        </v-flex>
+      </v-container>
+    </v-main>
+  </v-app>
 </template>
 
-<style scoped></style>
+<style scoped>
+#back {
+  background-image: url("@/assets/mypage.png");
+}
+</style>

@@ -65,19 +65,17 @@ const moveWrite = () => {
 </script>
 
 <template>
-  <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-lg-10">
-        <h2 class="my-3 py-3 shadow-sm bg-light text-center">
-          <mark class="sky">글목록</mark>
-        </h2>
-      </div>
+  <div style="margin-left: 200px; margin-top: 50px; margin-bottom: 50px">
+    <div class="row">
+      <h2 style="font-weight: bolder; color: #389561; margin-bottom: 25px">
+        <i class="bi bi-people-fill"></i> 동행 게시판
+      </h2>
       <div class="col-lg-10">
         <div class="row align-self-center mb-2">
-          <div class="col-md-2 text-start">
-            <button type="button" class="btn btn-outline-primary btn-sm" @click="moveWrite">
-              글쓰기
-            </button>
+          <div class="col-md-2 text-start" style="margin-bottom: 10px">
+            <v-btn variant="tonal" style="color: #4ca975" @click="moveWrite"
+              >글쓰기</v-btn
+            >
           </div>
           <div class="col-md-5 offset-5">
             <form class="d-flex">
@@ -89,7 +87,13 @@ const moveWrite = () => {
                   v-model="param.word"
                   placeholder="검색어..."
                 />
-                <button class="btn btn-dark" type="button" @click="getArticleList">검색</button>
+                &nbsp;
+                <v-btn
+                  variant="tonal"
+                  style="color: #4ca975"
+                  @click="getArticleList"
+                  >검색</v-btn
+                >
               </div>
             </form>
           </div>
@@ -101,15 +105,33 @@ const moveWrite = () => {
               <th scope="col">제목</th>
               <th scope="col">작성자</th>
               <th scope="col">조회수</th>
+              <th scope="col">댓글수</th>
               <th scope="col">작성일</th>
             </tr>
           </thead>
-          <tbody>
-            <BoardListItem
-              v-for="article in articles"
-              :key="article.articleNo"
-              :article="article"
-            ></BoardListItem>
+          <tbody
+            class="text-center"
+            v-for="(article, index) in articles"
+            :key="article.articleNo"
+          >
+            <tr :class="{ 'table-bg': article.isnotice === 1 }">
+              <td scope="row">{{ article.articleNo }}</td>
+              <th class="text-center">
+                <router-link
+                  :to="{
+                    name: 'article-view',
+                    params: { articleno: article.articleNo },
+                  }"
+                  class="article-title link-dark"
+                >
+                  {{ article.subject }}
+                </router-link>
+              </th>
+              <td>{{ article.userId }}</td>
+              <td>{{ article.hit }}</td>
+              <td>{{ article.comment }}</td>
+              <td>{{ article.date.substr(0, 10) }}</td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -122,4 +144,26 @@ const moveWrite = () => {
   </div>
 </template>
 
-<style scoped></style>
+<!-- <BoardListItem
+v-for="(article, index) in articles"
+:key="article.articleNo"
+:article="article"
+></BoardListItem> -->
+
+<style scoped>
+a {
+  text-decoration: none;
+}
+thead th {
+  padding: 10px;
+  background-color: #74d19d;
+}
+.table-bg {
+  --bs-table-bg: #f2f2f2;
+}
+.table-bg td,
+.table-bg th a {
+  color: #ff6a89 !important;
+  font-weight: bold;
+}
+</style>

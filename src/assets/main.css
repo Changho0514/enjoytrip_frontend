@@ -11,17 +11,6 @@
 .search {
   margin: 20px;
 }
-
-@keyframes slide {
-  from {
-    left: -100px;
-    opacity: 0;
-  }
-  to {
-    left: 400px 2s ease-out;
-    opacity: 1;
-  }
-}
-
-@keyframes disappear {
+* {
+  font-family: "Pretendard-Regular";
 }

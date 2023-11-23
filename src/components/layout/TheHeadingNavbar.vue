@@ -2,6 +2,7 @@
 import { useMenuStore } from "@/stores/menu";
 import { useMemberStore } from "@/stores/member";
 import { storeToRefs } from "pinia";
+import { watch, onMounted } from "vue";
 
 const menuStore = useMenuStore();
 
@@ -10,13 +11,42 @@ const { changeMenuState } = menuStore;
 
 const memberStore = useMemberStore();
 const { userInfo, isLogin } = storeToRefs(memberStore);
-const { userLogout } = memberStore;
+const { userLogout, getUserInfo } = memberStore;
 
 const logout = () => {
   console.log("로그아웃!!!!");
   // changeMenuState();
   userLogout();
 };
+
+const url = ({ saveFolder, saveFile }) =>
+  `http://localhost:8090/enjoytrip/profile/${saveFolder}/${saveFile}`;
+
+// // pinia에서 프로필사진이 변경되면 적용하기 위함
+// watch(
+//   () => userInfo.value,
+//   (newValue, oldValue) => {
+//     if (isLogin == true && newValue.originalFile != null) {
+//       console.log("watch originalFile");
+//       let token = sessionStorage.getItem("accessToken");
+//       getUserInfo(token);
+//     }
+//   }
+// );
+// // pinia에서 이름이 변경되면 적용하기 위함
+// watch(
+//   () => userInfo.value,
+//   (newValue, oldValue) => {
+//     if (isLogin == true && newValue.userName != null) {
+//       let token = sessionStorage.getItem("accessToken");
+//       getUserInfo(token);
+//     }
+//   }
+// );
+onMounted(() => {
+  let token = sessionStorage.getItem("accessToken");
+  getUserInfo(token);
+});
 </script>
 
 <template>
@@ -29,7 +59,7 @@ const logout = () => {
       <router-link
         :to="{ name: 'main' }"
         class="navbar-brand text-primary fw-bold"
-        ><img src="@/assets/logo.png" alt="" width="80"
+        ><img src="@/assets/logo.png" alt="" width="200"
       /></router-link>
       <button
         class="navbar-toggler"
@@ -49,7 +79,7 @@ const logout = () => {
         <ul class="navbar-nav me-auto">
           <li class="nav-item">
             <router-link :to="{ name: 'attraction' }" class="nav-link"
-              ><i class="bi bi-map"></i> 여행정보공유</router-link
+              ><i class="bi bi-map"></i> 지역별관광지</router-link
             >
           </li>
           <li class="nav-item">
@@ -64,7 +94,7 @@ const logout = () => {
           </li>
           <li class="nav-item">
             <router-link :to="{ name: 'board' }" class="nav-link"
-              ><i class="bi bi-share"></i> 여행정보공유</router-link
+              ><i class="bi bi-people-fill"></i> 동행구하기</router-link
             >
           </li>
         </ul>
@@ -97,12 +127,20 @@ const logout = () => {
             </template>
           </template>
           <li class="nav-item" v-if="isLogin && userInfo.roll === 1">
-            <router-link :to="{ name: 'user-list' }" class="nav-link"
-              >회원목록</router-link
+            <router-link :to="{ name: 'user-list' }" class="nav-link">
+              회원목록</router-link
             >
           </li>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <img
+            :src="url(userInfo)"
+            class="img-fluid rounded-start"
+            onerror="javascript:this.src='/src/assets/profile.jpg'"
+            style="width: 35px; height: 35px"
+            v-if="isLogin"
+          />
           <li class="nav-link" v-if="isLogin">
-            {{ userInfo.userName }}({{ userInfo.userId }})님 안녕하세요
+            {{ userInfo.userName }}({{ userInfo.userId }})님
           </li>
         </ul>
       </div>

@@ -1,3 +1,20 @@
+<script setup>
+const handleHotPlaceClick = () => {
+  // 요소를 찾아서 해당 요소로 스크롤 이동
+  const hotPlaceView = document.getElementById("hotplaceview");
+
+  if (hotPlaceView) {
+    // 클릭 시 즉시 이동
+    hotPlaceView.scrollIntoView();
+
+    // 0.8초 후에 한 번 더 이동
+    setTimeout(() => {
+      hotPlaceView.scrollIntoView();
+    }, 800);
+  }
+};
+</script>
+
 <template>
   <section id="featured-services" class="featured-services">
     <div class="container">
@@ -54,7 +71,10 @@
           <div class="service-item position-relative">
             <div class="icon"><i class="bi-star-fill"></i>></div>
             <h4>
-              <a href="#hotplaceview" class="stretched-link"
+              <a
+                href="#hotplaceview"
+                class="stretched-link"
+                @click="handleHotPlaceClick"
                 >핫 플레이스 공유</a
               >
             </h4>
@@ -68,16 +88,14 @@
   </section>
 </template>
 
-<script>
-let mainText = document.getElementById("col-xl-3");
-console.log("mainText : ", mainText);
-window.addEventListener("scroll", function () {
-  let value = window.scrollY;
-  console.log("scrollY", value);
-});
-</script>
-
 <style>
+@font-face {
+  font-family: "Pretendard-Regular";
+  src: url("https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff")
+    format("woff");
+  font-weight: 400;
+  font-style: normal;
+}
 .featured-services .service-item {
   padding: 30px;
   transition: all ease-in-out 0.4s;
@@ -129,16 +147,6 @@ window.addEventListener("scroll", function () {
 }
 .featured-services .service-item:hover h4 a {
   color: var(--color-primary);
-}
-@keyframes slide {
-  from {
-    left: -100px;
-    opacity: 0;
-  }
-  to {
-    left: 400px;
-    opacity: 1;
-  }
 }
 
 .stretched-link {

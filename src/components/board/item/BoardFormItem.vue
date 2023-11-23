@@ -2,6 +2,12 @@
 import { ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { registArticle, getModifyArticle, modifyArticle } from "@/api/board";
+import BKakaoMap from "./BKakaoMap.vue";
+import { useMemberStore } from "@/stores/member";
+import { storeToRefs } from "pinia";
+
+const memberStore = useMemberStore();
+const { userInfo } = storeToRefs(memberStore);
 
 const router = useRouter();
 const route = useRoute();
@@ -19,7 +25,9 @@ const article = ref({
   isnotice: 0,
   recommendation: 0,
   subject: "",
-  userId: "",
+  userId: userInfo.value.userId,
+  latitude: "",
+  longitude: "",
 });
 
 if (props.type === "modify") {
@@ -44,7 +52,7 @@ watch(
   () => article.value.subject,
   (value) => {
     let len = value.length;
-    if (len == 0 || len > 30) {
+    if (len == 0 || len > 100) {
       subjectErrMsg.value = "제목을 확인해 주세요!!!";
     } else subjectErrMsg.value = "";
   },
@@ -54,7 +62,7 @@ watch(
   () => article.value.content,
   (value) => {
     let len = value.length;
-    if (len == 0 || len > 500) {
+    if (len == 0 || len > 10000) {
       contentErrMsg.value = "내용을 확인해 주세요!!!";
     } else contentErrMsg.value = "";
   },
@@ -95,7 +103,7 @@ function updateArticle() {
       let msg = "글수정 처리시 문제 발생했습니다.";
       if (response.status == 200) msg = "글정보 수정이 완료되었습니다.";
       alert(msg);
-      moveList();
+      moveArticle();
     },
     (error) => console.log(error)
   );
@@ -104,57 +112,75 @@ function updateArticle() {
 function moveList() {
   router.push({ name: "article-list" });
 }
+
+function moveArticle() {
+  router.push({
+    name: "article-view",
+    param: { articleno: article.articleNo },
+  });
+}
+
+const sendPosition = (lat, lng) => {
+  console.log("위치가 부모로 잘 왔니?");
+  article.value.latitude = lat;
+  article.value.longitude = lng;
+};
 </script>
 
 <template>
-  <form @submit.prevent="onSubmit">
-    <div class="mb-3">
-      <label for="userid" class="form-label">작성자 ID : </label>
-      <input
-        type="text"
-        class="form-control"
-        v-model="article.userId"
-        :disabled="isUseId"
-        placeholder="작성자ID..."
-      />
+  <div class="row">
+    <div class="col-6">
+      <form @submit.prevent="onSubmit">
+        <div class="mb-3">
+          <label for="userid" class="form-label">작성자 ID : </label>
+          <input
+            type="text"
+            class="form-control"
+            v-model="article.userId"
+            :disabled="isUseId"
+            placeholder="작성자ID..."
+            readonly
+          />
+        </div>
+        <div class="mb-3">
+          <label for="subject" class="form-label">제목 : </label>
+          <input
+            type="text"
+            class="form-control"
+            v-model="article.subject"
+            placeholder="제목..."
+          />
+        </div>
+        <div class="mb-3">
+          <label for="content" class="form-label">내용 : </label>
+          <textarea
+            class="form-control"
+            v-model="article.content"
+            rows="10"
+          ></textarea>
+        </div>
+        <div class="col-auto text-center mb-3">
+          <v-btn
+            v-if="type === 'regist'"
+            type="submit"
+            variant="tonal"
+            style="color: #5ad18f"
+            >글작성</v-btn
+          >
+          <v-btn v-else variant="tonal" type="submit" style="color: #5ad18f"
+            >글수정</v-btn
+          >
+          &nbsp;
+          <v-btn variant="tonal" @click="moveList" style="color: #96a5ff"
+            >글목록</v-btn
+          >
+        </div>
+      </form>
     </div>
-    <div class="mb-3">
-      <label for="subject" class="form-label">제목 : </label>
-      <input
-        type="text"
-        class="form-control"
-        v-model="article.subject"
-        placeholder="제목..."
-      />
+    <div class="col-6">
+      <BKakaoMap @sendPosition="sendPosition" :article="article" />
     </div>
-    <div class="mb-3">
-      <label for="content" class="form-label">내용 : </label>
-      <textarea
-        class="form-control"
-        v-model="article.content"
-        rows="10"
-      ></textarea>
-    </div>
-    <div class="col-auto text-center">
-      <button
-        type="submit"
-        class="btn btn-outline-primary mb-3"
-        v-if="type === 'regist'"
-      >
-        글작성
-      </button>
-      <button type="submit" class="btn btn-outline-success mb-3" v-else>
-        글수정
-      </button>
-      <button
-        type="button"
-        class="btn btn-outline-danger mb-3 ms-1"
-        @click="moveList"
-      >
-        목록으로이동...
-      </button>
-    </div>
-  </form>
+  </div>
 </template>
 
 <style scoped></style>

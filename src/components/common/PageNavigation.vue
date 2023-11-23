@@ -7,17 +7,23 @@ const emit = defineEmits(["pageChange"]);
 const navigationSize = parseInt(import.meta.env.VITE_ARTICLE_NAVIGATION_SIZE);
 
 const startPage = computed(() => {
-  return parseInt((props.currentPage - 1) / navigationSize) * navigationSize + 1;
+  return (
+    parseInt((props.currentPage - 1) / navigationSize) * navigationSize + 1
+  );
 });
 
 const endPage = computed(() => {
   let lastPage =
-    parseInt((props.currentPage - 1) / navigationSize) * navigationSize + navigationSize;
+    parseInt((props.currentPage - 1) / navigationSize) * navigationSize +
+    navigationSize;
   return props.totalPage < lastPage ? props.totalPage : lastPage;
 });
 
 const endRange = computed(() => {
-  return parseInt((props.totalPage - 1) / navigationSize) * navigationSize < props.currentPage;
+  return (
+    parseInt((props.totalPage - 1) / navigationSize) * navigationSize <
+    props.currentPage
+  );
 });
 
 function range(start, end) {
@@ -36,7 +42,23 @@ function onPageChange(pg) {
 </script>
 
 <template>
-  <div class="row">
+  <div class="container">
+    <v-container color="red">
+      <v-row justify="center">
+        <v-col cols="8">
+          <v-container class="max-width">
+            <v-pagination
+              v-model="page"
+              class="my-4"
+              :length="endPage"
+              @click="onPageChange(page)"
+            ></v-pagination>
+          </v-container>
+        </v-col>
+      </v-row>
+    </v-container>
+  </div>
+  <!-- <div class="row">
     <ul class="pagination justify-content-center">
       <li class="page-item">
         <a class="page-link" @click="onPageChange(1)">최신</a>
@@ -54,7 +76,7 @@ function onPageChange(pg) {
       </li>
       <li class="page-item"><a class="page-link" @click="onPageChange(totalPage)">마지막</a></li>
     </ul>
-  </div>
+  </div> -->
 </template>
 
 <style scoped>

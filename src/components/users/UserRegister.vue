@@ -1,8 +1,11 @@
 <script setup>
-import { userRegist } from "@/api/user.js";
-import { ref } from "vue";
+import { userRegist, idCheck, uploadProfile } from "@/api/user.js";
+import { ref, watch } from "vue";
 import { useRouter } from "vue-router";
+
 const router = useRouter();
+
+// 유저 정보를 담는 객체 (v-model)
 const user = ref({
   userId: "",
   userName: "",
@@ -10,8 +13,13 @@ const user = ref({
   emailId: "",
   emailDomain: "",
 });
-const regist = () => {
-  userRegist(
+
+// 비밀번호 check를 위한 변수
+const pwdcheck = ref("");
+
+// 회원가입
+const regist = async () => {
+  await userRegist(
     user.value,
     (response) => {
       let msg = "회원가입에 실패했습니다";
@@ -23,76 +31,198 @@ const regist = () => {
       console.log(error);
     }
   );
+  // 프로필 업로드
+  const formData = new FormData();
+  formData.append("upfile", image.file);
+  formData.append("userId", user.value.userId);
+  await uploadProfile(
+    formData,
+    (response) => {
+      console.log(response);
+    },
+    (error) => {
+      console.log(error);
+    }
+  );
 };
+
 const goMainPage = () => {
   router.push({ name: "main" });
+};
+
+const idcheck_msg = ref("사용할 수 있는 아이디입니다");
+// 아이디를 입력하는 동안
+watch(
+  () => user.value.userId,
+  (newValue, oldValue) => {
+    idCheck(
+      user.value.userId,
+      ({ data }) => {
+        if (data === 1) {
+          idcheck_msg.value = "사용할 수 없는 아이디입니다";
+        } else {
+          idcheck_msg.value = "사용할 수 있는 아이디입니다";
+        }
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  }
+);
+
+// 비밀번호 확인란을 입력하는 동안
+const pwdcheck_msg = ref("비밀번호가 틀립니다");
+watch(
+  () => pwdcheck.value,
+  (newValue, oldValue) => {
+    console.log(pwdcheck, " ", user.value.userPwd);
+    if (pwdcheck.value === user.value.userPwd) {
+      pwdcheck_msg.value = "비밀번호가 일치합니다";
+    } else {
+      pwdcheck_msg.value = "비밀번호가 틀립니다";
+    }
+  }
+);
+
+// watch하는 message에 따라 색깔을 다르게 적용
+watch(
+  () => idcheck_msg.value,
+  (newValue, oldValue) => {
+    changeColor(newValue);
+  }
+);
+
+watch(
+  () => pwdcheck_msg.value,
+  (newValue, oldValue) => {
+    changeColor(newValue);
+  }
+);
+
+const textColor1 = ref("#8CBDED");
+const textColor2 = ref("#f57878");
+const changeColor = (message) => {
+  if (message === "사용할 수 있는 아이디입니다") {
+    textColor1.value = "#8CBDED";
+  }
+  if (message === "사용할 수 없는 아이디입니다") {
+    textColor1.value = "#f57878";
+  }
+  if (message === "비밀번호가 일치합니다") {
+    textColor2.value = "#8CBDED";
+  } else {
+    textColor2.value = "#f57878";
+  }
+};
+
+// 이미지 업로드를 위한 변수
+const image = ref({
+  file: null,
+});
+
+const onInputImg = (e) => {
+  console.log("이미지 upload ", e.target.files[0]);
+  image.file = e.target.files[0];
 };
 </script>
 
 <template>
-  <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-lg-10">
-        <h2 class="my-3 py-3 shadow-sm bg-light text-center">
-          <mark class="orange">회원가입</mark>
-        </h2>
-      </div>
-      <div class="col-lg-10 text-start">
-        <form>
-          <div class="mb-3">
-            <label for="username" class="form-label">이름 : </label>
-            <input type="text" class="form-control" placeholder="이름..." v-model="user.userName" />
-          </div>
-          <div class="mb-3">
-            <label for="userid" class="form-label">아이디 : </label>
-            <input type="text" class="form-control" placeholder="아이디..." v-model="user.userId" />
-          </div>
-          <div class="mb-3">
-            <label for="userpwd" class="form-label">비밀번호 : </label>
-            <input
-              type="text"
-              class="form-control"
-              placeholder="비밀번호..."
-              v-model="user.userPwd"
-            />
-          </div>
-          <div class="mb-3">
-            <label for="pwdcheck" class="form-label">비밀번호확인 : </label>
-            <input type="text" class="form-control" id="pwdcheck" placeholder="비밀번호확인..." />
-          </div>
-          <div class="mb-3">
-            <label for="emailid" class="form-label">이메일 : </label>
-            <div class="input-group">
-              <input
-                type="text"
-                class="form-control"
-                placeholder="이메일아이디"
-                v-model="user.emailId"
-              />
-              <span class="input-group-text">@</span>
-              <select
-                class="form-select"
-                aria-label="이메일 도메인 선택"
-                v-model="user.emailDomain"
-              >
-                <option selected>선택</option>
-                <option value="ssafy.com">싸피</option>
-                <option value="google.com">구글</option>
-                <option value="naver.com">네이버</option>
-                <option value="kakao.com">카카오</option>
-              </select>
+  <v-app id="back">
+    <v-main>
+      <!-- Login Component -->
+      <v-container style="max-width: 500px" id="container">
+        <v-flex xs12>
+          <v-card>
+            <div class="pa-10">
+              <h1 style="text-align: center; font-weight: bold" class="mb-10">
+                Regist
+              </h1>
+              <form>
+                <v-text-field
+                  label="ID"
+                  prepend-inner-icon="mdi-account"
+                  v-model="user.userId"
+                ></v-text-field>
+                <p
+                  id="msg"
+                  :style="{
+                    color: textColor1,
+                  }"
+                >
+                  {{ idcheck_msg }}
+                </p>
+                <v-text-field
+                  label="Name"
+                  prepend-inner-icon="mdi-account-box"
+                  v-model="user.userName"
+                ></v-text-field>
+                <v-text-field
+                  prepend-inner-icon="mdi-lock"
+                  type="password"
+                  label="Password"
+                  v-model="user.userPwd"
+                >
+                </v-text-field>
+                <v-text-field
+                  prepend-inner-icon="mdi-lock"
+                  type="password"
+                  label="Password Check"
+                  v-model="pwdcheck"
+                >
+                </v-text-field>
+                <p
+                  id="msg"
+                  :style="{
+                    color: textColor2,
+                  }"
+                >
+                  {{ pwdcheck_msg }}
+                </p>
+                <v-layout row wrap>
+                  <v-text-field
+                    prepend-inner-icon="mdi-email-open-outline"
+                    type="email"
+                    label="EmailId"
+                    v-model="user.emailId"
+                    style="width: 100px"
+                  ></v-text-field>
+                  &nbsp;&nbsp;&nbsp;
+                  <v-text-field
+                    prepend-inner-icon="mdi-email-outline"
+                    type="email"
+                    label="EmailDomain"
+                    v-model="user.emailDomain"
+                    style="width: 150px"
+                  >
+                  </v-text-field>
+                </v-layout>
+                <input
+                  id="write-file"
+                  class="file-input mb-3"
+                  ref="file"
+                  type="file"
+                  @change="onInputImg"
+                  placeholder="첨부된 파일이 없습니다."
+                />
+                <v-btn flat color="#CD4275" @click="regist"> 회원가입 </v-btn>
+              </form>
             </div>
-          </div>
-          <div class="col-auto text-center">
-            <button type="button" class="btn btn-outline-primary mb-3" @click="regist">
-              회원가입
-            </button>
-            <button type="button" class="btn btn-outline-success ms-1 mb-3">초기화</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
+          </v-card>
+        </v-flex>
+      </v-container>
+    </v-main>
+  </v-app>
 </template>
 
-<style scoped></style>
+<style scoped>
+#container {
+  margin-top: 100px;
+}
+#back {
+  background-image: url("@/assets/login.jpg");
+}
+#msg {
+  text-align: left;
+}
+</style>

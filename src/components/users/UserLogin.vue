@@ -11,13 +11,14 @@ const memberStore = useMemberStore();
 
 const { isLogin } = storeToRefs(memberStore);
 const { userLogin, getUserInfo } = memberStore;
-const { changeMenuState } = useMenuStore();
 
+// 유저 객체
 const loginUser = ref({
   userId: "",
   userPwd: "",
 });
 
+// 로그인 버튼을 누르면 실행되는 함수
 const login = async () => {
   console.log("login ing!!!! !!!------------------------------------------");
   await userLogin(loginUser.value);
@@ -27,61 +28,58 @@ const login = async () => {
   if (isLogin) {
     console.log("로그인 성공아닌가???");
     getUserInfo(token);
-    // changeMenuState();
   }
   router.push("/");
+};
+
+const goRegist = () => {
+  router.push({ name: "user-join" });
 };
 </script>
 
 <template>
-  <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-lg-10">
-        <h2 class="my-3 py-3 shadow-sm bg-light text-center">
-          <mark class="orange">로그인</mark>
-        </h2>
-      </div>
-      <div class="col-lg-10">
-        <form>
-          <div class="form-check mb-3 float-end">
-            <input class="form-check-input" type="checkbox" />
-            <label class="form-check-label" for="saveid"> 아이디저장 </label>
-          </div>
-          <div class="mb-3 text-start">
-            <label for="userid" class="form-label">아이디 : </label>
-            <input
-              type="text"
-              class="form-control"
-              v-model="loginUser.userId"
-              placeholder="아이디..."
-            />
-          </div>
-          <div class="mb-3 text-start">
-            <label for="userpwd" class="form-label">비밀번호 : </label>
-            <input
-              type="password"
-              class="form-control"
-              v-model="loginUser.userPwd"
-              @keyup.enter="login"
-              placeholder="비밀번호..."
-            />
-          </div>
-          <div class="col-auto text-center">
-            <button
-              type="button"
-              class="btn btn-outline-primary mb-3"
-              @click="login"
-            >
-              로그인
-            </button>
-            <button type="button" class="btn btn-outline-success ms-1 mb-3">
-              회원가입
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
+  <v-app id="back" class="darken-background">
+    <v-main>
+      <v-container style="max-width: 500px" id="container">
+        <v-flex xs12>
+          <v-card>
+            <div class="pa-10">
+              <h1 style="text-align: center; font-weight: bold" class="mb-10">
+                Login
+              </h1>
+              <form>
+                <v-text-field
+                  label="ID"
+                  prepend-inner-icon="mdi-account"
+                  v-model="loginUser.userId"
+                ></v-text-field>
+                <v-text-field
+                  prepend-inner-icon="mdi-lock"
+                  type="password"
+                  label="Password"
+                  v-model="loginUser.userPwd"
+                >
+                </v-text-field>
+                <v-btn flat color="#CD4275" @click="login"> 로그인 </v-btn>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                계정이 없으신가요? &nbsp;
+                <v-btn flat style="background-color: #dcdcdc" @click="goRegist">
+                  회원가입
+                </v-btn>
+              </form>
+            </div>
+          </v-card>
+        </v-flex>
+      </v-container>
+    </v-main>
+  </v-app>
 </template>
 
-<style scoped></style>
+<style scoped>
+#container {
+  margin-top: 200px;
+}
+#back {
+  background-image: url("@/assets/login.jpg");
+}
+</style>

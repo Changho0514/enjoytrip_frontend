@@ -1,14 +1,9 @@
 import { createRouter, createWebHistory } from "vue-router";
 import TheMainView from "../views/TheMainView.vue";
-import TheElectricChargingStationVue from "@/views/TheElectricChargingStation.vue";
 import TheAttractionView from "@/views/TheAttractionView.vue";
 import TheMytripView from "@/views/TheMytripView.vue";
 import TheHotplaceView from "@/views/TheHotplaceView.vue";
 import TheBoardView from "../views/TheBoardView.vue";
-import TestView from "@/views/TestView.vue";
-import BoardTestView from "@/views/BoardTestView.vue";
-import MainRecommendView from "@/components/main/MainRecommendView.vue";
-import MainAccompanyView from "@/components/main/MainAccompanyView.vue";
 
 import { storeToRefs } from "pinia";
 import { useMemberStore } from "@/stores/member";
@@ -66,7 +61,11 @@ const router = createRouter({
           component: () => import("@/components/users/UserMyPage.vue"),
         },
         {
-          // path: "modify/:userid",
+          path: "change",
+          name: "user-changePwd",
+          component: () => import("@/components/users/UserPwdModify.vue"),
+        },
+        {
           path: "modify",
           name: "user-modify",
           component: () => import("@/components/users/UserModify.vue"),
@@ -79,7 +78,6 @@ const router = createRouter({
         },
       ],
     },
-
     {
       path: "/attraction",
       name: "attraction",
@@ -104,11 +102,7 @@ const router = createRouter({
           name: "hotplace-list",
           component: () => import("@/components/hotplace/HotplaceList.vue"),
         },
-        {
-          path: "view/:hotplaceno",
-          name: "hotplace-view",
-          component: () => import("@/components/hotplace/HotplaceView.vue"),
-        },
+
         {
           path: "write",
           name: "hotplace-write",

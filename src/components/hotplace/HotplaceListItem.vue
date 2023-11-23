@@ -8,17 +8,14 @@ const urls = ({ saveFolder, saveFile }) =>
 </script>
 
 <template>
-  <tr class="text-center">
-    <div class="card shadow-sm">
-      <img
-        :src="urls(hotplace)"
-        width="70%"
-        height="200"
-        class="bd-placeholder-img card-img-top"
-        :alt="hotplace.title"
-      />
-    </div>
-    <th scope="row">{{ hotplace.hotplaceNo }}</th>
+  <div class="bg-grey-lighten">
+    <img
+      :src="urls(hotplace)"
+      style="aspect-ratio: 1; object-fit: cover"
+      class="bd-placeholder-img card-img-top"
+      :alt="hotplace.title"
+    />
+    <!-- <th scope="row">{{ hotplace.hotplaceNo }}</th>
     <td class="text-start">
       <router-link
         :to="{
@@ -32,8 +29,8 @@ const urls = ({ saveFolder, saveFile }) =>
     </td>
     <td>{{ hotplace.userId }}</td>
     <td>{{ hotplace.address }}</td>
-    <td>{{ hotplace.date }}</td>
-  </tr>
+    <td>{{ hotplace.date }}</td> -->
+  </div>
 </template>
 
 <style scoped>

@@ -17,16 +17,11 @@ watch(
     let points = [];
     props.attractions.forEach((attraction) => {
       let obj = {};
-      obj.latlng = new kakao.maps.LatLng(
-        attraction.latitude,
-        attraction.longitude
-      );
+      obj.latlng = new kakao.maps.LatLng(attraction.latitude, attraction.longitude);
       obj.title = attraction.title;
       positions.value.push(obj);
 
-      points.push(
-        new kakao.maps.LatLng(attraction.latitude, attraction.longitude)
-      );
+      points.push(new kakao.maps.LatLng(attraction.latitude, attraction.longitude));
     });
     // 연결선 초기화
     deletePolylines();
@@ -102,8 +97,7 @@ const loadMarkers = () => {
   deleteOverlays();
 
   // 마커 이미지의 이미지 주소입니다
-  const imgSrc =
-    "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
+  const imgSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
   // 마커 이미지의 이미지 크기 입니다
   const imgSize = new kakao.maps.Size(24, 35);
   const markerImage = new kakao.maps.MarkerImage(imgSrc, imgSize);
@@ -163,8 +157,7 @@ function getTimeHTML(distance) {
 
   // 계산한 도보 시간이 60분 보다 크면 시간으로 표시합니다
   if (walkkTime > 60) {
-    walkHour =
-      '<span class="number">' + Math.floor(walkkTime / 60) + "</span>시간 ";
+    walkHour = '<span class="number">' + Math.floor(walkkTime / 60) + "</span>시간 ";
   }
   walkMin = '<span class="number">' + (walkkTime % 60) + "</span>분";
 
@@ -175,25 +168,36 @@ function getTimeHTML(distance) {
 
   // 계산한 자전거 시간이 60분 보다 크면 시간으로 표출합니다
   if (bycicleTime > 60) {
-    bycicleHour =
-      '<span class="number">' + Math.floor(bycicleTime / 60) + "</span>시간 ";
+    bycicleHour = '<span class="number">' + Math.floor(bycicleTime / 60) + "</span>시간 ";
   }
   bycicleMin = '<span class="number">' + (bycicleTime % 60) + "</span>분";
+
+  // 자동차의 평균 시속은 60km/h, 분속은 1000m/min
+  var carTime = (distance / 1000) | 0;
+  var carHour = "",
+    carMin = "";
+
+  if (carTime > 60) {
+    carHour = '<span class="number">' + Math.floor(carTime / 60) + "</span>시간 ";
+  }
+  carMin = '<span class="number">' + (carTime % 60) + "</span>분";
 
   // 거리와 도보 시간, 자전거 시간을 가지고 HTML Content를 만들어 리턴합니다
   var content = '<ul class="dotOverlay distanceInfo">';
   content += "    <li>";
   content +=
     '        <span class="label">총거리</span><span class="number">' +
-    distance +
-    "</span>m";
+    distance / 1000 +
+    "</span>km";
   content += "    </li>";
   content += "    <li>";
   content += '        <span class="label">도보</span>' + walkHour + walkMin;
   content += "    </li>";
   content += "    <li>";
-  content +=
-    '        <span class="label">자전거</span>' + bycicleHour + bycicleMin;
+  content += '        <span class="label">자전거</span>' + bycicleHour + bycicleMin;
+  content += "    </li>";
+  content += "    <li>";
+  content += '        <span class="label">자동차</span>' + carHour + carMin;
   content += "    </li>";
   content += "</ul>";
 

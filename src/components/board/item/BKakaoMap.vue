@@ -1,30 +1,29 @@
 <script setup>
 import { ref, watch, onMounted } from "vue";
 
-const emit = defineEmits(["addPlan"]);
+const emit = defineEmits(["sendPosition"]);
 
-const addPlan = function (target) {
-  emit("addPlan", target);
+const sendPosition = function (lat, lng) {
+  emit("sendPosition", lat, lng);
 };
 
 var map;
 const positions = ref([]);
 const markers = ref([]);
 
-const props = defineProps({ attractions: Array, selectAttraction: Object });
+const props = defineProps({ article: Object });
 
 watch(
-  () => props.selectAttraction.value,
-  () => {
-    // 이동할 위도 경도 위치를 생성합니다
-    var moveLatLon = new kakao.maps.LatLng(
-      props.selectAttraction.latitude,
-      props.selectAttraction.longitude
+  () => props.article.value,
+  (newValue, oldValue) => {
+    positions.value = [];
+    let obj = {};
+    obj.latlng = new kakao.maps.LatLng(
+      props.article.latitude,
+      props.article.longitude
     );
-
-    // 지도 중심을 부드럽게 이동시킵니다
-    // 만약 이동할 거리가 지도 화면보다 크면 부드러운 효과 없이 이동합니다
-    map.panTo(moveLatLon);
+    positions.value.push(obj);
+    loadMarkers();
   },
   { deep: true }
 );
@@ -43,34 +42,41 @@ onMounted(() => {
   }
 });
 
-watch(
-  () => props.attractions.value,
-  () => {
-    positions.value = [];
-    props.attractions.forEach((attraction) => {
-      let obj = {};
-      obj.latlng = new kakao.maps.LatLng(attraction.latitude, attraction.longitude);
-      obj.title = attraction.title;
-      obj.contentId = attraction.contentId;
-      obj.addr1 = attraction.addr1;
-      obj.image = attraction.firstImage;
-      obj.zipcode = attraction.zipcode;
-      obj.addr2 = attraction.addr2;
-
-      positions.value.push(obj);
-    });
-    loadMarkers();
-  },
-  { deep: true }
-);
-
 const initMap = () => {
   const container = document.getElementById("map");
   const options = {
-    center: new kakao.maps.LatLng(33.450701, 126.570667),
+    center: new kakao.maps.LatLng(37.50133, 127.039587),
     level: 3,
   };
   map = new kakao.maps.Map(container, options);
+
+  // 지도를 클릭한 위치에 표출할 마커입니다
+  var marker = new kakao.maps.Marker({
+    // 지도 중심좌표에 마커를 생성합니다
+    // position: map.getCenter(),
+  });
+
+  // 지도에 마커를 표시합니다
+  marker.setMap(map);
+
+  // 지도에 클릭 이벤트를 등록합니다
+  // 지도를 클릭하면 마지막 파라미터로 넘어온 함수를 호출합니다
+  kakao.maps.event.addListener(map, "click", function (mouseEvent) {
+    console.log("마커 클릭");
+    deleteMarkers();
+    // 클릭한 위도, 경도 정보를 가져옵니다
+    var latlng = mouseEvent.latLng;
+
+    // 마커 위치를 클릭한 위치로 옮깁니다
+    marker.setPosition(latlng);
+
+    var message = "클릭한 위치의 위도는 " + latlng.getLat() + " 이고, ";
+    message += "경도는 " + latlng.getLng() + " 입니다";
+
+    emit("sendPosition", latlng.getLat(), latlng.getLng());
+    // var resultDiv = document.getElementById("clickLatlng");
+    // resultDiv.innerHTML = message;
+  });
 
   // loadMarkers();
 };
@@ -97,53 +103,6 @@ const loadMarkers = () => {
       contentId: position.contentId,
     });
     markers.value.push(marker);
-
-    var content =
-      '<div class="wrap">' +
-      '    <div class="info">' +
-      '        <div class="title">' +
-      `${position.title}` +
-      '            <div class="close" title="닫기"></div>' +
-      "        </div>" +
-      '        <div class="body">' +
-      '            <div class="img">' +
-      '                <img src="' +
-      `${position.image}` +
-      '" width="73" height="70">' +
-      "           </div>" +
-      '            <div class="desc">' +
-      '                <div class="ellipsis">' +
-      `${position.addr1}` +
-      "</div>" +
-      '                <div class="jibun ellipsis">(우편번호)' +
-      `${position.zipcode}` +
-      "  (지번)" +
-      `${position.addr2}` +
-      "</div>" +
-      '                <div><a href="https://www.kakaocorp.com/main" target="_blank" class="link">홈페이지</a></div>' +
-      "            </div>" +
-      "        </div>" +
-      "    </div>" +
-      "</div>";
-
-    var overlay = new kakao.maps.CustomOverlay({
-      content: content,
-      map: map,
-      position: marker.getPosition(),
-    });
-    overlay.setMap(null);
-    // 마커를 클릭했을 때 커스텀 오버레이를 표시합니다
-    kakao.maps.event.addListener(marker, "mouseover", function () {
-      overlay.setMap(map);
-    });
-    kakao.maps.event.addListener(marker, "mouseout", function () {
-      overlay.setMap(null);
-    });
-    kakao.maps.event.addListener(marker, "click", function () {
-      // 마커를 클릭하면 계획 저장됨
-      console.log("마커 클릭 : ", position.contentId);
-      emit("addPlan", position.contentId);
-    });
   });
 
   // 4. 지도를 이동시켜주기
@@ -170,7 +129,7 @@ const deleteMarkers = () => {
 <style>
 #map {
   width: 100%;
-  height: 700px;
+  height: 500px;
 }
 .wrap {
   position: absolute;

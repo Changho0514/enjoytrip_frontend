@@ -42,6 +42,35 @@ async function userList(success, fail) {
   await local.get(`/admin/list`).then(success).catch(fail);
 }
 
+async function idCheck(userId, success, fail) {
+  await local.get(`/user/idcheck/${userId}`).then(success).catch(fail);
+}
+
+async function changePwd(user, success, fail) {
+  await local.put(`/user/change`, JSON.stringify(user)).then(success).catch(fail);
+}
+
+async function adminDelete(userId, success, fail) {
+  console.log("관리자가 회원을 삭제한다", userId);
+  await local.delete(`/admin/delete/${userId}`).then(success).catch(fail);
+}
+
+async function adminGetUser(userId, success, fail) {
+  await local.get(`/admin/list/${userId}`).then(success).catch(fail);
+}
+
+async function uploadProfile(formData, success, fail) {
+  console.log("upload profile", formData);
+  await local
+    .post(`/user/profile`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
+    .then(success)
+    .catch(fail);
+}
+
 export {
   userConfirm,
   findById,
@@ -52,4 +81,9 @@ export {
   findPwd,
   userModify,
   userList,
+  idCheck,
+  changePwd,
+  adminDelete,
+  adminGetUser,
+  uploadProfile,
 };

@@ -1,14 +1,27 @@
+<script setup>
+import MainPlanExampl1 from "@/components/main/MainPlanExampl1.vue";
+import MainPlanExampl2 from "@/components/main/MainPlanExampl2.vue";
+
+import { useRouter } from "vue-router";
+const router = useRouter();
+
+const goAttraction = () => {
+  router.push({ name: "attraction" });
+};
+</script>
+
 <template>
   <link
     rel="stylesheet"
     href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
   />
   <div class="container my-5" id="planview">
-    <div
-      class="row p-4 pb-0 pe-lg-0 pt-lg-5 align-items-center rounded-3 border shadow-lg"
-    >
+    <div class="row p-4 pb-0 pe-lg-0 pt-lg-5 align-items-center rounded-3 border shadow-lg">
       <div class="col-lg-12 p-3 p-lg-5 pt-lg-3">
-        <h1 class="display-4 fw-bold lh-1 text-body-emphasis text-middle">
+        <h1
+          class="display-4 fw-bold lh-1 text-body-emphasis text-middle"
+          style="margin-top: 20px; margin-bottom: 30px"
+        >
           여행 계획
         </h1>
         <div class="album py-5 bg-body-tertiary">
@@ -16,44 +29,28 @@
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
               <div class="col">
                 <div class="card">
-                  <div
-                    class="card-bg"
-                    style="background-image: url('src/assets/kyungpo.png')"
-                  >
-                    <h3 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold">
+                  <div class="card-bg" style="background-image: url('src/assets/kyungpo.png')">
+                    <h3 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold" style="color: #fdf5e6">
                       강릉 여행
                     </h3>
                   </div>
 
                   <div class="card-body">
                     <MainPlanExampl2 />
-                    <div
-                      class="d-flex justify-content-between align-items-center"
-                    >
-                      <small class="text-body-secondary">3일전</small>
-                    </div>
                   </div>
                 </div>
               </div>
 
               <div class="col">
                 <div class="card">
-                  <div
-                    class="card-bg"
-                    style="background-image: url('src/assets/gwangju.png')"
-                  >
-                    <h3 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold">
+                  <div class="card-bg" style="background-image: url('src/assets/gwangju.png')">
+                    <h3 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold" style="color: #fdf5e6">
                       추석 광주 여행
                     </h3>
                     <div class="innerInfo"></div>
                   </div>
                   <div class="card-body">
                     <MainPlanExampl1 />
-                    <div
-                      class="d-flex justify-content-between align-items-center"
-                    >
-                      <small class="text-body-secondary">15시간전</small>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -92,20 +89,14 @@
   </div>
 </template>
 
-<script setup>
-import "@/assets/dist/js/bootstrap.bundle.min.js";
-import MainPlanExampl1 from "@/components/main/MainPlanExampl1.vue";
-import MainPlanExampl2 from "@/components/main/MainPlanExampl2.vue";
-
-import { useRouter } from "vue-router";
-const router = useRouter();
-
-const goAttraction = () => {
-  router.push({ name: "attraction" });
-};
-</script>
-
 <style scoped>
+@font-face {
+  font-family: "Pretendard-Regular";
+  src: url("https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff")
+    format("woff");
+  font-weight: 400;
+  font-style: normal;
+}
 img {
   margin-top: 10px;
   max-width: 100%;
